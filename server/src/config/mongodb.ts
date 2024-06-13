@@ -1,12 +1,9 @@
 import { Db, MongoClient, ServerApiVersion } from 'mongodb'
-
-const MONGGODB_URI =
-  'mongodb+srv://phuongminh:E8FvPDdVcWhBUQQe@phamducphuongminh.udkmsfl.mongodb.net/?retryWrites=true&w=majority'
-const DATABASE_NAME = 'phamducphuongminh'
+import env from './environment'
 
 let databaseInstance: Db | null = null
 
-const mongoClientInstance = new MongoClient(MONGGODB_URI, {
+const mongoClientInstance = new MongoClient(env.MONGGODB_URI, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
@@ -17,7 +14,7 @@ const mongoClientInstance = new MongoClient(MONGGODB_URI, {
 export const CONNECT_DB = async () => {
   await mongoClientInstance.connect()
 
-  databaseInstance = mongoClientInstance.db(DATABASE_NAME)
+  databaseInstance = mongoClientInstance.db(env.DATABASE_NAME)
 }
 
 export const GET_DB = () => {
