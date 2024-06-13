@@ -1,10 +1,22 @@
 import express from 'express'
 import exitHook from 'async-exit-hook'
-import { CLOSE_DB, CONNECT_DB, GET_DB } from './config/mongodb'
-import env from './config/environment'
+import cors from 'cors'
+import { CLOSE_DB, CONNECT_DB, GET_DB } from '~/config/mongodb'
+import env from '~/config/environment'
+import { corsOptions } from '~/config/cors'
+import { errorHandlingMiddleware } from '~/middlewares/error.middleware'
 
 const START_SERVER = () => {
   const app = express()
+
+  app.use(cors(corsOptions))
+
+  // Enable req.body json data
+  app.use(express.json())
+
+  // Middleware handle concentration error
+  app.use(errorHandlingMiddleware)
+
   app.get('/', async (req, res) => {
     console.log(await GET_DB().listCollections().toArray())
     res.send('Hello World!')
